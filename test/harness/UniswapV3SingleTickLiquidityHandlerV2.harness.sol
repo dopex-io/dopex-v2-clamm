@@ -11,21 +11,21 @@ import {TickMath} from "@uniswap/v3-core/contracts/libraries/TickMath.sol";
 import {LiquidityAmounts} from "v3-periphery/libraries/LiquidityAmounts.sol";
 
 import {DopexV2PositionManager} from "../../src/DopexV2PositionManager.sol";
-import {UniswapV3SingleTickLiquidityHandler} from "../../src/handlers/UniswapV3SingleTickLiquidityHandler.sol";
+import {UniswapV3SingleTickLiquidityHandlerV2} from "../../src/handlers/UniswapV3SingleTickLiquidityHandlerV2.sol";
 import {IHandler} from "../../src/interfaces/IHandler.sol";
 
-contract PositionManagerHandler is Test {
+contract UniswapV3SingleTickLiquidityHarnessV2 is Test {
     using TickMath for int24;
 
     UniswapV3TestLib uniswapV3TestLib;
     DopexV2PositionManager positionManager;
-    UniswapV3SingleTickLiquidityHandler uniV3Handler;
+    UniswapV3SingleTickLiquidityHandlerV2 uniV3Handler;
     IHandler handler;
 
     constructor(
         UniswapV3TestLib _uniswapV3TestLib,
         DopexV2PositionManager _positionManager,
-        UniswapV3SingleTickLiquidityHandler _uniV3Handler
+        UniswapV3SingleTickLiquidityHandlerV2 _uniV3Handler
     ) {
         uniswapV3TestLib = _uniswapV3TestLib;
         positionManager = _positionManager;
@@ -74,7 +74,7 @@ contract PositionManagerHandler is Test {
         (lm) = positionManager.mintPosition(
             handler,
             abi.encode(
-                UniswapV3SingleTickLiquidityHandler.MintPositionParams({
+                UniswapV3SingleTickLiquidityHandlerV2.MintPositionParams({
                     pool: pool,
                     tickLower: tickLower,
                     tickUpper: tickUpper,
@@ -97,7 +97,7 @@ contract PositionManagerHandler is Test {
         (lb) = positionManager.burnPosition(
             handler,
             abi.encode(
-                UniswapV3SingleTickLiquidityHandler.BurnPositionParams({
+                UniswapV3SingleTickLiquidityHandlerV2.BurnPositionParams({
                     pool: pool,
                     tickLower: tickLower,
                     tickUpper: tickUpper,
@@ -128,7 +128,7 @@ contract PositionManagerHandler is Test {
         (tokens, amounts, ) = positionManager.usePosition(
             handler,
             abi.encode(
-                UniswapV3SingleTickLiquidityHandler.UsePositionParams({
+                UniswapV3SingleTickLiquidityHandlerV2.UsePositionParams({
                     pool: pool,
                     tickLower: tickLower,
                     tickUpper: tickUpper,
@@ -175,7 +175,7 @@ contract PositionManagerHandler is Test {
         (amounts, ) = positionManager.unusePosition(
             handler,
             abi.encode(
-                UniswapV3SingleTickLiquidityHandler.UnusePositionParams({
+                UniswapV3SingleTickLiquidityHandlerV2.UnusePositionParams({
                     pool: pool,
                     tickLower: tickLower,
                     tickUpper: tickUpper,
@@ -222,7 +222,7 @@ contract PositionManagerHandler is Test {
         (amounts, ) = positionManager.donateToPosition(
             handler,
             abi.encode(
-                UniswapV3SingleTickLiquidityHandler.DonateParams({
+                UniswapV3SingleTickLiquidityHandlerV2.DonateParams({
                     pool: pool,
                     tickLower: tickLower,
                     tickUpper: tickUpper,

@@ -12,10 +12,10 @@ import {TickMath} from "@uniswap/v3-core/contracts/libraries/TickMath.sol";
 import {LiquidityAmounts} from "v3-periphery/libraries/LiquidityAmounts.sol";
 
 import {DopexV2PositionManager} from "../src/DopexV2PositionManager.sol";
-import {PositionManagerHandler} from "./handlers/PositionManager.handler.sol";
+import {UniswapV3SingleTickLiquidityHarness} from "./harness/UniswapV3SingleTickLiquidityHandler.harness.sol";
 import {UniswapV3SingleTickLiquidityHandler} from "../src/handlers/UniswapV3SingleTickLiquidityHandler.sol";
 
-contract PositionManagerHandlerTest is Test {
+contract positionManagerHarnessTest is Test {
     using TickMath for int24;
 
     address ETH; // token1
@@ -40,7 +40,7 @@ contract PositionManagerHandlerTest is Test {
     address tango = makeAddr("tango"); // tango address
 
     DopexV2PositionManager positionManager;
-    PositionManagerHandler positionManagerHandler;
+    UniswapV3SingleTickLiquidityHarness positionManagerHarness;
     UniswapV3SingleTickLiquidityHandler uniV3Handler;
 
     function setUp() public {
@@ -80,7 +80,7 @@ contract PositionManagerHandlerTest is Test {
             address(uniswapV3TestLib.swapRouter())
         );
 
-        positionManagerHandler = new PositionManagerHandler(
+        positionManagerHarness = new UniswapV3SingleTickLiquidityHarness(
             uniswapV3TestLib,
             positionManager,
             uniV3Handler
@@ -104,7 +104,7 @@ contract PositionManagerHandlerTest is Test {
         int24 tickLower = -77420; // 2299.8
         int24 tickUpper = -77410; // 2302.1
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount0,
@@ -115,7 +115,7 @@ contract PositionManagerHandlerTest is Test {
             bob
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount0,
@@ -137,7 +137,7 @@ contract PositionManagerHandlerTest is Test {
         int24 tickLower = -77420; // 2299.8
         int24 tickUpper = -77410; // 2302.1
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount0,
@@ -158,7 +158,7 @@ contract PositionManagerHandlerTest is Test {
             })
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount01,
@@ -190,7 +190,7 @@ contract PositionManagerHandlerTest is Test {
             })
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount01,
@@ -211,7 +211,7 @@ contract PositionManagerHandlerTest is Test {
             })
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount0,
@@ -230,7 +230,7 @@ contract PositionManagerHandlerTest is Test {
         int24 tickLower = -77420; // 2299.8
         int24 tickUpper = -77410; // 2302.1
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount0,
@@ -261,7 +261,7 @@ contract PositionManagerHandlerTest is Test {
             })
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount0,
@@ -301,15 +301,15 @@ contract PositionManagerHandlerTest is Test {
 
         uint256 bobBalance = uniV3Handler.balanceOf(
             bob,
-            positionManagerHandler.getTokenId(pool, tickLower, tickUpper)
+            positionManagerHarness.getTokenId(pool, tickLower, tickUpper)
         );
 
         uint256 jasonBalance = uniV3Handler.balanceOf(
             jason,
-            positionManagerHandler.getTokenId(pool, tickLower, tickUpper)
+            positionManagerHarness.getTokenId(pool, tickLower, tickUpper)
         );
 
-        positionManagerHandler.burnPosition(
+        positionManagerHarness.burnPosition(
             bobBalance,
             tickLower,
             tickUpper,
@@ -317,7 +317,7 @@ contract PositionManagerHandlerTest is Test {
             bob
         );
 
-        positionManagerHandler.burnPosition(
+        positionManagerHarness.burnPosition(
             jasonBalance - 1, // since you can't reset the shares
             tickLower,
             tickUpper,
@@ -330,7 +330,7 @@ contract PositionManagerHandlerTest is Test {
         int24 tickLower = -77420;
         int24 tickUpper = -77410;
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             0,
@@ -351,7 +351,7 @@ contract PositionManagerHandlerTest is Test {
             })
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             2,
@@ -364,15 +364,15 @@ contract PositionManagerHandlerTest is Test {
 
         uint256 bobBalance = uniV3Handler.balanceOf(
             bob,
-            positionManagerHandler.getTokenId(pool, tickLower, tickUpper)
+            positionManagerHarness.getTokenId(pool, tickLower, tickUpper)
         );
 
         uint256 jasonBalance = uniV3Handler.balanceOf(
             jason,
-            positionManagerHandler.getTokenId(pool, tickLower, tickUpper)
+            positionManagerHarness.getTokenId(pool, tickLower, tickUpper)
         );
 
-        positionManagerHandler.burnPosition(
+        positionManagerHarness.burnPosition(
             bobBalance,
             tickLower,
             tickUpper,
@@ -380,7 +380,7 @@ contract PositionManagerHandlerTest is Test {
             bob
         );
 
-        positionManagerHandler.burnPosition(
+        positionManagerHarness.burnPosition(
             jasonBalance - 1, // since you can't reset the shares
             tickLower,
             tickUpper,
@@ -397,7 +397,7 @@ contract PositionManagerHandlerTest is Test {
         int24 tickLower = -77420;
         int24 tickUpper = -77410;
 
-        positionManagerHandler.usePosition(
+        positionManagerHarness.usePosition(
             amount0,
             amount1,
             tickLower,
@@ -437,7 +437,7 @@ contract PositionManagerHandlerTest is Test {
         int24 tickLower = -77420;
         int24 tickUpper = -77410;
 
-        positionManagerHandler.unusePosition(
+        positionManagerHarness.unusePosition(
             token0,
             token1,
             amount0,
@@ -452,15 +452,15 @@ contract PositionManagerHandlerTest is Test {
 
         uint256 bobBalance = uniV3Handler.balanceOf(
             bob,
-            positionManagerHandler.getTokenId(pool, tickLower, tickUpper)
+            positionManagerHarness.getTokenId(pool, tickLower, tickUpper)
         );
 
         uint256 jasonBalance = uniV3Handler.balanceOf(
             jason,
-            positionManagerHandler.getTokenId(pool, tickLower, tickUpper)
+            positionManagerHarness.getTokenId(pool, tickLower, tickUpper)
         );
 
-        positionManagerHandler.burnPosition(
+        positionManagerHarness.burnPosition(
             bobBalance,
             tickLower,
             tickUpper,
@@ -468,7 +468,7 @@ contract PositionManagerHandlerTest is Test {
             bob
         );
 
-        positionManagerHandler.burnPosition(
+        positionManagerHarness.burnPosition(
             jasonBalance - 1, // since you can't reset the shares
             tickLower,
             tickUpper,
@@ -488,7 +488,7 @@ contract PositionManagerHandlerTest is Test {
 
         vm.roll(block.number + 1);
 
-        positionManagerHandler.donatePosition(
+        positionManagerHarness.donatePosition(
             token0,
             token1,
             amount0,
@@ -503,7 +503,7 @@ contract PositionManagerHandlerTest is Test {
 
         vm.roll(block.number + 5);
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             0,
@@ -514,7 +514,7 @@ contract PositionManagerHandlerTest is Test {
             roger
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             0,
@@ -529,25 +529,25 @@ contract PositionManagerHandlerTest is Test {
 
         uint256 bobBalance = uniV3Handler.balanceOf(
             bob,
-            positionManagerHandler.getTokenId(pool, tickLower, tickUpper)
+            positionManagerHarness.getTokenId(pool, tickLower, tickUpper)
         );
 
         uint256 jasonBalance = uniV3Handler.balanceOf(
             jason,
-            positionManagerHandler.getTokenId(pool, tickLower, tickUpper)
+            positionManagerHarness.getTokenId(pool, tickLower, tickUpper)
         );
 
         uint256 rogerBalance = uniV3Handler.balanceOf(
             roger,
-            positionManagerHandler.getTokenId(pool, tickLower, tickUpper)
+            positionManagerHarness.getTokenId(pool, tickLower, tickUpper)
         );
 
         uint256 tangoBalance = uniV3Handler.balanceOf(
             tango,
-            positionManagerHandler.getTokenId(pool, tickLower, tickUpper)
+            positionManagerHarness.getTokenId(pool, tickLower, tickUpper)
         );
 
-        positionManagerHandler.burnPosition(
+        positionManagerHarness.burnPosition(
             bobBalance,
             tickLower,
             tickUpper,
@@ -555,21 +555,21 @@ contract PositionManagerHandlerTest is Test {
             bob
         );
 
-        positionManagerHandler.burnPosition(
+        positionManagerHarness.burnPosition(
             jasonBalance,
             tickLower,
             tickUpper,
             pool,
             jason
         );
-        positionManagerHandler.burnPosition(
+        positionManagerHarness.burnPosition(
             rogerBalance,
             tickLower,
             tickUpper,
             pool,
             roger
         );
-        positionManagerHandler.burnPosition(
+        positionManagerHarness.burnPosition(
             tangoBalance - 1, // since you can't reset the shares
             tickLower,
             tickUpper,
@@ -585,7 +585,7 @@ contract PositionManagerHandlerTest is Test {
         int24 tickLower = -75770; // ~1950
         int24 tickUpper = -75760; // ~1952
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount0,
@@ -596,7 +596,7 @@ contract PositionManagerHandlerTest is Test {
             bob
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount0,
@@ -607,7 +607,7 @@ contract PositionManagerHandlerTest is Test {
             jason
         );
 
-        positionManagerHandler.usePosition(
+        positionManagerHarness.usePosition(
             amount0,
             amount1,
             tickLower,
@@ -672,7 +672,7 @@ contract PositionManagerHandlerTest is Test {
 
         // console.log(a0, a1);
 
-        positionManagerHandler.unusePosition(
+        positionManagerHarness.unusePosition(
             token0,
             token1,
             a0,
@@ -705,7 +705,7 @@ contract PositionManagerHandlerTest is Test {
         int24 tickLower = -76260; // ~2050
         int24 tickUpper = -76250; // ~2048
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount0,
@@ -716,7 +716,7 @@ contract PositionManagerHandlerTest is Test {
             bob
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             amount0,
@@ -727,7 +727,7 @@ contract PositionManagerHandlerTest is Test {
             jason
         );
 
-        positionManagerHandler.usePosition(
+        positionManagerHarness.usePosition(
             amount0,
             amount1,
             tickLower,
@@ -786,7 +786,7 @@ contract PositionManagerHandlerTest is Test {
 
         // console.log(a0, a1);
 
-        positionManagerHandler.unusePosition(
+        positionManagerHarness.unusePosition(
             token0,
             token1,
             a0,

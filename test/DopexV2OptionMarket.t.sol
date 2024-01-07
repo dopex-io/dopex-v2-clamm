@@ -12,7 +12,7 @@ import {TickMath} from "@uniswap/v3-core/contracts/libraries/TickMath.sol";
 import {LiquidityAmounts} from "v3-periphery/libraries/LiquidityAmounts.sol";
 
 import {DopexV2PositionManager} from "../src/DopexV2PositionManager.sol";
-import {PositionManagerHandler} from "./handlers/PositionManager.handler.sol";
+import {UniswapV3SingleTickLiquidityHarness} from "./harness/UniswapV3SingleTickLiquidityHandler.harness.sol";
 import {UniswapV3SingleTickLiquidityHandler} from "../src/handlers/UniswapV3SingleTickLiquidityHandler.sol";
 import {DopexV2OptionMarket} from "../src/DopexV2OptionMarket.sol";
 
@@ -69,7 +69,7 @@ contract optionMarketTest is Test {
     address autoExercisoor = makeAddr("autoExercisoor"); // auto exciseroor role
 
     DopexV2PositionManager positionManager;
-    PositionManagerHandler positionManagerHandler;
+    UniswapV3SingleTickLiquidityHarness positionManagerHarness;
     DopexV2OptionMarket optionMarket;
     UniswapV3SingleTickLiquidityHandler uniV3Handler;
     DopexV2ClammFeeStrategy feeStrategy;
@@ -102,7 +102,7 @@ contract optionMarketTest is Test {
             address(uniswapV3TestLib.swapRouter())
         );
 
-        positionManagerHandler = new PositionManagerHandler(
+        positionManagerHarness = new UniswapV3SingleTickLiquidityHarness(
             uniswapV3TestLib,
             positionManager,
             uniV3Handler
@@ -174,7 +174,7 @@ contract optionMarketTest is Test {
         autoExercise.grantRole(keccak256("EXECUTOR"), autoExercisoor);
 
         // for calls
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             0,
@@ -185,7 +185,7 @@ contract optionMarketTest is Test {
             bob
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             0,
@@ -197,7 +197,7 @@ contract optionMarketTest is Test {
         );
 
         // for puts
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             10_000e18,
@@ -208,7 +208,7 @@ contract optionMarketTest is Test {
             bob
         );
 
-        positionManagerHandler.mintPosition(
+        positionManagerHarness.mintPosition(
             token0,
             token1,
             10_000e18,
