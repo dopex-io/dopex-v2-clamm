@@ -109,7 +109,7 @@ contract optionMarketTest is Test {
         );
 
         op = new OptionPricing(500, 1e8);
-        opl = new OptionPricingLinear(1e4, 1e3);
+        opl = new OptionPricingLinear(1e4, 1e3, 1e8);
         srs = new SwapRouterSwapper(address(uniswapV3TestLib.swapRouter()));
 
         feeStrategy = new DopexV2ClammFeeStrategy();
