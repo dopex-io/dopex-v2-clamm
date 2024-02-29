@@ -10,7 +10,7 @@ contract BoundedTTLHook_1Week is IHook, Ownable {
     function onPositionUse(bytes calldata _data) external {
         (address app, uint256 ttl) = abi.decode(_data, (address, uint256));
         if (!whitelistedApps[app]) revert();
-        if (ttl < 7 days) revert();
+        if (ttl > 7 days) revert();
     }
 
     function onPositionUnUse(bytes calldata _data) external {}

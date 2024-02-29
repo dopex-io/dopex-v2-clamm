@@ -127,8 +127,8 @@ contract optionMarketTest is Test {
         feeStrategy.registerOptionMarket(address(optionMarket), 350000);
 
         uint256[] memory ttls = new uint256[](2);
-        ttls[0] = 1 hours;
-        ttls[1] = 1 weeks;
+        ttls[0] = 1 weeks;
+        ttls[1] = 2 weeks;
 
         uint256[] memory IVs = new uint256[](2);
         IVs[0] = 100;
@@ -382,7 +382,7 @@ contract optionMarketTest is Test {
                 optionTicks: opTicks,
                 tickLower: tickLowerCalls,
                 tickUpper: tickUpperCalls,
-                ttl: 1 hours,
+                ttl: 2 weeks,
                 isCall: true,
                 maxCostAllowance: cost
             })
